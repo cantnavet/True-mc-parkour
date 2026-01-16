@@ -6,6 +6,7 @@ const ctx = canvas.getContext('2d');
 const restartBtn = document.getElementById('restartBtn');
 const shop = document.getElementById('shop');
 const shopD = document.getElementById('shopDisplay');
+const helpD = document.getElementById('helpDisplay');
 const gameD = document.getElementById('gameDisplay');
 const coinsD = document.getElementById('coins');
 const deb = document.getElementById('deb');
@@ -16,7 +17,7 @@ const damageTypes =[2,200,70000,20000000,7000000000,2000000000000];
 const XTypes =[1,2,3,4,5,6];
 const upgradeSpawnTime =[200,400,600,800,1000,99999999];
 const colors =['#663300','#ffffff','#ffff00','#888888','#00ffff','#000000'];
-// 这辈子都用不着的神必单位合集，不用中文是因为我找不到好字体(
+// 这辈子都用不着的神必单位合集
 const numberToEng =['','K','M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','Ud','Dd','Td','Qad','Qid','Sxd','Spd', 'Ocd', 'Nod', 'VgUvg' ,'Dvg' ,'Tvg', 'Qavg', 'Qivg', 'Sxvg', 'Spvg', 'Ocvg', 'Novg', 'TgUtg', 'Dtg', 'Ttg', 'Qatg','Qitg','Sxtg','Sptg', 'Octg', 'Notg', 'QagUqag', 'Dqag' ,'Tqag', 'Qaqag' ,'QiQag' ,'SxQag', 'SpQag', 'OcQag', 'NoQag','Bruh'];
 const bulletSpeeds =[5,8,12,16,20,25];
 const fireLims =[5,4,3.3,2.5,2,1];
@@ -1674,10 +1675,17 @@ function goShop() {
   updateShop();
 }
 
+function goHelp() {
+  gameD.style.opacity = 0.5;
+  helpD.style.top = 50+"%";
+  openShop.play();
+}
+
 function goGame() {
   closeShop.play()
   gameD.style.opacity = 1;
   shopD.style.top = -100+"%";
+  helpD.style.top = -100+"%";
   if (defaults){
     Maxbullets = [6,6,6,6,6,6];
     player.maxHealth = 5;
@@ -1763,6 +1771,7 @@ function loadData() {
 
 function goMainCD() {
     console.log("goingCD");
+    CDDisplay.style.display = 'block'; // 显示整个cdDisplay容器
     startb.style.display = 'block';
     mainCD = true;
     initGame();
@@ -1777,6 +1786,7 @@ function goMainCD() {
 function start() {
     console.log("start");
     startb.style.display = 'none';
+    CDDisplay.style.display = 'none'; // 隐藏整个cdDisplay容器
     mainCD = false;
     initGame();
     gameLoop();
