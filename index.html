@@ -86,11 +86,13 @@
             transform: translateX(-50%);
         }
         
-        #shopDisplay{
+        #shopDisplay, #helpDisplay{
             position: absolute;
             top: -100%;
             left: 50%;
-            width: 50%;
+            width: 600px;
+            max-width: 90%;
+            max-height: 80vh;
             transition: top 0.7s cubic-bezier(0.5, 0, 0.2, 1), transform 0.5s ease-out;
             transform: translateX(-50%) translateY(-50%);
         }
@@ -142,17 +144,18 @@
 <body>
     <div id="gameDisplay" class="game-container">
         <span style="display: flex;">
-            <div>
+            <div style="display: flex; flex-direction: column;">
                 <button style="width: 50px; height: 50px;" onclick="goMainCD()">🏠</button>
-                <button id="deb" style="width: 50px; height: 50px; display: none;" onclick="defaultButton()">Default</button>
+                <button id="deb" style="width: 50px; height: 50px; display: none; font-size: 10px;" onclick="defaultButton()">Default</button>
             </div>
 
             <canvas id="gameCanvas" width="600" height="800"></canvas>
             <div class="bg-container" id="bg"></div>
             <div class="bg2-container" id="bg2"></div>
-            <div>
+            <div style="display: flex; flex-direction: column;">
                 <button id="stop" style="width: 50px; height: 50px; font-family: Jellee;" onclick="stop();">l l</button>
                 <button id="shop" style="width: 50px; height: 50px; font-family: Jellee;" onclick="goShop();">🛒</button>
+                <button id="help" style="width: 50px; height: 50px; font-family: Jellee;" onclick="goHelp();">❓</button>
                 <button id="restartBtn" style="width: 50px; height: 50px;">↺</button>
             </div>
         </span>
@@ -308,7 +311,54 @@
                     </table>
                 </div>
             </div>
-            <button id="back" style="background-color: #ababab; margin: 12px; height: 30px; width: 90%;" onclick="goGame()">Back</button>
+            <button id="back" style="background-color: #ababab; margin: 12px; height: 30px; width: 90%;" onclick="goGame()">Close</button>
+        </div>
+    </div>
+    <div id="helpDisplay" class="shop-container">
+        <div id="mainshop">
+            <h1>HOW TO PLAY</h1>
+            <div style="padding: 20px; text-align: left; max-height: 70vh; overflow-y: auto; font-size: 16px; line-height: 1.6; color: #ffffff; background-color: #555555; border: 3px solid #333333; border-radius: 4px;">
+                <h2 style="color: #ffffff; border-bottom: 2px solid #ffffff; padding-bottom: 8px; margin-top: 0; font-size: 22px;">Basic Controls</h2>
+                <ul style="list-style-type: disc; padding-left: 25px; margin: 15px 0;">
+                    <li style="margin-bottom: 8px;">Move your mouse to control the player's position</li>
+                    <li style="margin-bottom: 8px;">Bullets fire automatically - no need to click!</li>
+                    <li style="margin-bottom: 8px;">Collect falling barriers to gain immediate upgrades</li>
+                    <li style="margin-bottom: 8px;">Choose from different upgrade paths to enhance your abilities</li>
+                </ul>
+                <h2 style="color: #ffffff; border-bottom: 2px solid #ffffff; padding-bottom: 8px; margin-top: 25px; font-size: 22px;">Upgrades</h2>
+                <ul style="list-style-type: disc; padding-left: 25px; margin: 15px 0;">
+                    <li style="margin-bottom: 8px;"><strong style="color: #ffcccc;">Fire Rate</strong>: Increases how fast you shoot bullets</li>
+                    <li style="margin-bottom: 8px;"><strong style="color: #ffcccc;">Damage</strong>: Increases the damage of each bullet</li>
+                    <li style="margin-bottom: 8px;"><strong style="color: #ffcccc;">Bullet Limit</strong>: Increases the number of bullets you can fire at once</li>
+                </ul>
+                <h2 style="color: #ffffff; border-bottom: 2px solid #ffffff; padding-bottom: 8px; margin-top: 25px; font-size: 22px;">Shop</h2>
+                <ul style="list-style-type: disc; padding-left: 25px; margin: 15px 0;">
+                    <li style="margin-bottom: 8px;">Buy permanent upgrades using coins earned from playing</li>
+                    <li style="margin-bottom: 8px;">Upgrade bullet limits for different bullet types</li>
+                    <li style="margin-bottom: 8px;">Increase your maximum health</li>
+                </ul>
+                <h2 style="color: #ffffff; border-bottom: 2px solid #ffffff; padding-bottom: 8px; margin-top: 25px; font-size: 22px;">Important Notes</h2>
+                <ul style="list-style-type: disc; padding-left: 25px; margin: 15px 0;">
+                    <li style="margin-bottom: 8px;">Enemies become stronger as the game progresses</li>
+                    <li style="margin-bottom: 8px;">You only can change game speed at home page before start</li>
+                    <li style="margin-bottom: 8px;">Watch out for enemy patterns and adjust your strategy</li>
+                    <li style="margin-bottom: 8px;">Collecting suitable upgrades is crucial for surviving longer</li>
+                    <li style="margin-bottom: 8px;">Use the pause button (ll) if you need a break</li>
+                    <li style="margin-bottom: 8px;">Lower graphics quality if experiencing lag</li>
+                    <li style="margin-bottom: 8px;">Use the Default button to temporarily lock all bonuses to the initial state (no purchases), click again to restore</li>
+                </ul>
+                <h2 style="color: #ffffff; border-bottom: 2px solid #ffffff; padding-bottom: 8px; margin-top: 25px; font-size: 22px;">Hidden Details</h2>
+                <ul style="list-style-type: disc; padding-left: 25px; margin: 15px 0;">
+                    <li style="margin-bottom: 8px;">There are 6 different bullet types with varying properties</li>
+                    <li style="margin-bottom: 8px;">Some achievements require specific actions to unlock</li>
+                    <li style="margin-bottom: 8px;">Game difficulty increases based on your survival time</li>
+                    <li style="margin-bottom: 8px;">You can reset all upgrades by enabling "Default" mode</li>
+                    <li style="margin-bottom: 8px;">Bullet bonuses cannot exceed the bullet limit shown in the bottom left corner</li>
+                    <li style="margin-bottom: 8px;">The probability of bullet bonuses appearing depends on your current bullet limit</li>
+                    <li style="margin-bottom: 8px;">You can increase your bullet limit by purchasing upgrades in the shop</li>
+                </ul>
+            </div>
+            <button id="helpBack" style="background-color: #ababab; margin: 12px; height: 30px; width: 90%;" onclick="goGame()">Close</button>
         </div>
     </div>
 </body>
