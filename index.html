@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Copyright (C) 2025 cantnavet -->
+    <meta charset = "UTF-8">
+    <title>Shooting Game</title>
+    <style>
+
+        @font-face {
+            font-family: 'Jellee';
+            src: url('fonts/Jellee.ttf');
+        }
+
+        body {
+            background-color: #333333;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Jellee', sans-serif; 
+            transition: background-color 1.5s
+        }
+        canvas { border: 1px solid white }
+        canvas {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #restartBtn { display: none; padding: 10px 20px; }
+
+        button {
+            border-radius: 10px;
+            font-family: 'Jellee';
+        }
+
+        .bg-container {
+        position: fixed;
+        top: -100%;
+        left: 50px;
+        width: 100%;
+        height: 100%;
+        image-rendering: pixelated;
+        background-image: url('textures/d1b2.png');
+        background-size: cover;
+        background-position: center var(--bg-pos-ys);
+        z-index: -1145141919; /*(?)*/
+        opacity: 1;
+        transition: top 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: particleMove var(--bg-speed) linear infinite;
+        }
+
+        .bg2-container {
+        position: fixed;
+        top: -100%;
+        left: 50px;
+        width: 100%;
+        height: 100%;
+        image-rendering: pixelated;
+        background-image: url('textures/d2b2.png');
+        background-size: cover;
+        background-position: center var(--bg-pos-ys);
+        z-index: -1145141920; 
+        opacity: 1;
+        transition: top 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: particleMove var(--bg-speed) linear infinite;
+        }
+
+        @keyframes particleMove {
+        100% { background-position: center top; }
+        }
+
+        
+        .midActive {
+        top: 0;
+        opacity: 1;
+        }
+
+
+        #shop{
+            color: white;
+        }
+
+        #gameDisplay{
+            position: absolute;
+            opacity: 1;
+            transition: opacity 0.5s cubic-bezier(0.5, 0, 0.5, 1);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        #shopDisplay{
+            position: absolute;
+            top: -100%;
+            left: 50%;
+            width: 50%;
+            transition: top 0.7s cubic-bezier(0.5, 0, 0.2, 1), transform 0.5s ease-out;
+            transform: translateX(-50%) translateY(-50%);
+        }
+
+        #mainshop{
+            position: relative;
+            text-align: center;
+            background-color: #555555;
+            border: 3px solid gray; 
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        #product{
+            position: relative;
+            display: flex;
+            align-items: center; 
+            border-radius: 10px;
+            margin: 10px;
+            transition: transform 0.3s;
+        }
+
+        #productImage{
+            position: relative;
+            width: 64px;
+            height: 64px;
+            image-rendering: pixelated;
+        }
+
+        #products{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        #cdDisplay{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%)
+        }
+
+    </style>
+    <script src="script.js" type="text/javascript" defer></script>
+</head>
+<body>
+    <div id="gameDisplay" class="game-container">
+        <span style="display: flex;">
+            <div>
+                <button style="width: 50px; height: 50px;" onclick="goMainCD()">🏠</button>
+                <button id="deb" style="width: 50px; height: 50px; display: none;" onclick="defaultButton()">Default</button>
+            </div>
+
+            <canvas id="gameCanvas" width="600" height="800"></canvas>
+            <div class="bg-container" id="bg"></div>
+            <div class="bg2-container" id="bg2"></div>
+            <div>
+                <button id="stop" style="width: 50px; height: 50px; font-family: Jellee;" onclick="stop();">l l</button>
+                <button id="shop" style="width: 50px; height: 50px; font-family: Jellee;" onclick="goShop();">🛒</button>
+                <button id="restartBtn" style="width: 50px; height: 50px;">↺</button>
+            </div>
+        </span>
+        <div style="color: white; margin-top: 10px; display: flex;">
+            <div style="width: 50px;"></div>
+            Game Speed: 
+            <input type="range" id="speedRange" min="1" max="5" step="0.1" value="1" 
+                style="vertical-align: middle; width: 100px;">
+            <span id="speedValue">1x</span>
+        </div>
+        <div style="color: white; margin-top: 10px; display: flex;">
+            <div style="width: 50px;"></div>
+            Graphics: 
+            <input type="range" id="speedRange2" min="0" max="3" step="1" value="3" 
+                style="vertical-align: middle; width: 100px;">
+            <span id="speedValue2">3</span>
+            <span style="color: gray; font-size: 12px;">(Reduce if experiencing lag)</span>
+        </div>
+        <!-- <div id="shop">
+            coins: <span id="coins">0</span>
+            <br>
+            
+            
+        </div> -->
+        
+        <!-- <button id="left" style="width: 300px; height: 100px;">←</button>
+        <button id="right" style="width: 300px; height: 100px;">→</button> -->
+        <div id="cdDisplay">
+            <button id="startb" style="width: 200px; height: 50px;" onclick="start()">START</button>
+        </div>
+    </div>
+    <div id="shopDisplay" class="shop-container">
+        <div id="mainshop">
+            <h1>SHOP</h1>
+            <div style="background-color: rgb(158, 143, 26);">
+                <hr>
+                <span style="color: gold;">
+                    coins:
+                </span>
+                <span style="color: gold;" id="coins">
+                    0.0
+                </span>
+                <hr>
+            </div>
+            
+            <div id="products">
+                <div id="product" style="background-color: #723f0b; border: 3px solid #926131; ">
+                    <table style="width: 100%;">
+                        <tr style="color: #ffa600;">
+                            <td rowspan="3" style="width: 0px; padding: 10px;">
+                                <img src="textures/leather_boots.png" id="productImage">
+                            </td>
+                            <td style="text-align: left;">Leather Boots Bullet Limit</td>
+                            <td> </td>
+                            <td id="bootCount1">10</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button id="buy1" style="width: 100%; height: 30px; background-color: #b46e29;" onclick = "buy(0)">20 coins</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="product" style="background-color: #ababab; border: 3px solid rgb(218, 218, 218); ">
+                    <table style="width: 100%;">
+                        <tr style="color: #ffffff;">
+                            <td rowspan="3" style="width: 0px; padding: 10px;">
+                                <img src="textures/iron_boots.png" id="productImage">
+                            </td>
+                            <td style="text-align: left;">Iron Boots Bullet Limit</td>
+                            <td> </td>
+                            <td  id="bootCount2">10</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button id="buy2" style="width: 100%; height: 30px;" onclick = "buy(1)">20 coins</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="product" style="background-color: rgb(227, 193, 0); border: 3px solid yellow; ">
+                    <table style="width: 100%;">
+                        <tr style="color: rgb(255, 255, 118);">
+                            <td rowspan="3" style="width: 0px; padding: 10px;">
+                                <img src="textures/gold_boots.png" id="productImage">
+                            </td>
+                            <td style="text-align: left;">Golden Boots Bullet Limit</td>
+                            <td> </td>
+                            <td  id="bootCount3">10</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button id="buy3" style="width: 100%; height: 30px; background-color: yellow;" onclick = "buy(2)">20 coins</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            
+
+                <div id="product" style="background-color: rgb(126, 126, 126); border: 3px solid rgb(178, 178, 176); ">
+                    <table style="width: 100%;">
+                        <tr style="color: rgb(221, 221, 221);">
+                            <td rowspan="3" style="width: 0px; padding: 10px;">
+                                <img src="textures/chainmail_boots.png" id="productImage">
+                            </td>
+                            <td style="text-align: left;">Chainmail Boots Bullet Limit</td>
+                            <td> </td>
+                            <td  id="bootCount4">10</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button id="buy4" style="width: 100%; height: 30px; background-color: rgb(178, 178, 176);" onclick = "buy(3)">20 coins</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="product" style="background-color: rgb(0, 230, 230); border: 3px solid rgb(150,255,255); ">
+                    <table style="width: 100%;">
+                        <tr style="color: rgb(0, 120, 120);">
+                            <td rowspan="3" style="width: 0px; padding: 10px;">
+                                <img src="textures/diamond_boots.png" id="productImage">
+                            </td>
+                            <td style="text-align: left;">Diamond Boots Bullet Limit</td>
+                            <td> </td>
+                            <td  id="bootCount5">10</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button id="buy5" style="width: 100%; height: 30px; background-color: rgb(120,255,255);" onclick = "buy(4)">20 coins</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="product" style="background-color: rgb(255, 64, 64); border: 3px solid rgb(255, 120,120); ">
+                    <table style="width: 100%;">
+                        <tr style="color: rgb(120,0,0);">
+                            <td rowspan="3" style="width: 0px; padding: 10px;">
+                                <img src="textures/heart.png" id="productImage">
+                            </td>
+                            <td style="text-align: left;">Max Health</td>
+                            <td> </td>
+                            <td  id="heart">10</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button id="buy6" style="width: 100%; height: 30px; background-color: rgb(255,120,120);" onclick = "buy(5)">20 coins</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <button id="back" style="background-color: #ababab; margin: 12px; height: 30px; width: 90%;" onclick="goGame()">Back</button>
+        </div>
+    </div>
+</body>
+</html>
